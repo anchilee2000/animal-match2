@@ -3,96 +3,140 @@
 <head>
   <meta charset="UTF-8">
   <title>กินอะไรดี?</title>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&display=swap" rel="stylesheet">
   <style>
+    * {
+      box-sizing: border-box;
+    }
     body {
       font-family: 'Kanit', sans-serif;
+      background: linear-gradient(135deg, #ffe9e3, #fffde7);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
+      min-height: 100vh;
       margin: 0;
-      background-color: #fffde7;
+      padding: 20px;
       text-align: center;
     }
     h1 {
-      color: #ff6f00;
+      color: #ff6f61;
+      font-size: 3em;
+      margin-bottom: 20px;
+      text-shadow: 1px 1px 0 #fff;
     }
     button {
-      padding: 1em 2em;
-      font-size: 1.2em;
-      background-color: #ffcc80;
+      background-color: #ffb6b9;
+      color: #fff;
       border: none;
-      border-radius: 10px;
+      border-radius: 50px;
+      padding: 15px 30px;
+      font-size: 1.2em;
       cursor: pointer;
+      transition: background-color 0.3s ease;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.1);
       margin: 10px;
     }
     button:hover {
-      background-color: #ffe0b2;
+      background-color: #ffa6a9;
     }
     #result {
-      margin-top: 20px;
-      font-size: 1.5em;
-      color: #4e342e;
-    }
-    #food-img {
-      width: 200px;
-      height: 200px;
-      object-fit: cover;
-      border-radius: 20px;
-      margin-top: 20px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      font-size: 2em;
+      margin-top: 30px;
+      color: #5d4037;
     }
     .share-buttons {
       margin-top: 20px;
+      display: none;
+    }
+    .share-buttons button {
+      background-color: #ffd180;
+      color: #5d4037;
+      margin: 5px;
+    }
+    .share-buttons button:hover {
+      background-color: #ffe0b2;
+    }
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.2);
+      animation: float 8s infinite ease-in-out;
+    }
+    .bubble:nth-child(1) {
+      width: 80px;
+      height: 80px;
+      top: 10%;
+      left: 5%;
+      animation-delay: 0s;
+    }
+    .bubble:nth-child(2) {
+      width: 60px;
+      height: 60px;
+      bottom: 10%;
+      right: 10%;
+      animation-delay: 3s;
+    }
+    .bubble:nth-child(3) {
+      width: 40px;
+      height: 40px;
+      top: 50%;
+      right: 5%;
+      animation-delay: 6s;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+      100% { transform: translateY(0); }
     }
   </style>
 </head>
 <body>
+  <div class="bubble"></div>
+  <div class="bubble"></div>
+  <div class="bubble"></div>
+
   <h1>กินอะไรดี?</h1>
   <button onclick="suggestFood()">สุ่มเมนูเลย!</button>
   <p id="result">...</p>
-  <img id="food-img" src="" alt="" style="display: none;">
 
-  <div class="share-buttons" style="display: none;" id="share-buttons">
+  <div class="share-buttons" id="share-buttons">
     <button onclick="shareFacebook()">แชร์ Facebook</button>
     <button onclick="shareLINE()">แชร์ LINE</button>
   </div>
 
   <script>
     const foods = [
-      { name: "ข้าวมันไก่", img: "https://upload.wikimedia.org/wikipedia/commons/6/6f/Khao_Man_Gai.jpg" },
-      { name: "ส้มตำไก่ย่าง", img: "https://upload.wikimedia.org/wikipedia/commons/e/e3/Som_Tum_Thai.JPG" },
-      { name: "ราเมงหมูชาชู", img: "https://upload.wikimedia.org/wikipedia/commons/f/f0/Tonkotsu_ramen_by_satoshi.jpg" },
-      { name: "หมูกระทะ", img: "https://upload.wikimedia.org/wikipedia/commons/e/e6/Mu_Kratha.jpg" },
-      { name: "ซูชิแซลมอน", img: "https://upload.wikimedia.org/wikipedia/commons/e/e0/Sake_Sushi.jpg" },
-      { name: "บะหมี่เป็ดย่าง", img: "https://upload.wikimedia.org/wikipedia/commons/8/89/Bamee_Ped.jpg" },
-      { name: "ข้าวผัดกะเพรา", img: "https://upload.wikimedia.org/wikipedia/commons/e/e0/Thai_basil_chicken_%28Pad_Kra_Pao%29.jpg" },
-      { name: "ชาบูบุฟเฟ่ต์", img: "https://upload.wikimedia.org/wikipedia/commons/e/e7/Shabu_shabu_001.jpg" },
-      { name: "ไก่ทอดเกาหลี", img: "https://upload.wikimedia.org/wikipedia/commons/6/61/Korean_Fried_Chicken_02.jpg" },
-      { name: "ข้าวแกงกะหรี่", img: "https://upload.wikimedia.org/wikipedia/commons/0/0b/Curry_rice_001.jpg" }
+      "ข้าวมันไก่",
+      "ส้มตำไก่ย่าง",
+      "ราเมงหมูชาชู",
+      "หมูกระทะ",
+      "ซูชิแซลมอน",
+      "บะหมี่เป็ดย่าง",
+      "ข้าวผัดกะเพรา",
+      "ชาบูบุฟเฟ่ต์",
+      "ไก่ทอดเกาหลี",
+      "ข้าวแกงกะหรี่"
     ];
 
     let currentFood = null;
 
     function suggestFood() {
       currentFood = foods[Math.floor(Math.random() * foods.length)];
-      document.getElementById("result").innerText = "วันนี้ขอแนะนำ: " + currentFood.name;
-      const img = document.getElementById("food-img");
-      img.src = currentFood.img;
-      img.alt = currentFood.name;
-      img.style.display = "block";
+      document.getElementById("result").innerText = "วันนี้ขอแนะนำ: " + currentFood;
       document.getElementById("share-buttons").style.display = "block";
     }
 
     function shareFacebook() {
       const url = encodeURIComponent(window.location.href);
-      const quote = encodeURIComponent(`วันนี้กิน ${currentFood.name} ด้วยกันไหม?`);
+      const quote = encodeURIComponent(`วันนี้กิน ${currentFood} ด้วยกันไหม?`);
       window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${quote}`, '_blank');
     }
 
     function shareLINE() {
-      const text = encodeURIComponent(`วันนี้กิน ${currentFood.name} ด้วยกันไหม? ลองสุ่มเมนูได้ที่นี่เลย: ${window.location.href}`);
+      const text = encodeURIComponent(`วันนี้กิน ${currentFood} ด้วยกันไหม? ลองสุ่มเมนูได้ที่นี่เลย: ${window.location.href}`);
       window.open(`https://line.me/R/msg/text/?${text}`, '_blank');
     }
   </script>
