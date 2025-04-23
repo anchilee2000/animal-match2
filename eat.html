@@ -13,6 +13,7 @@
       height: 100vh;
       margin: 0;
       background-color: #fffde7;
+      text-align: center;
     }
     h1 {
       color: #ff6f00;
@@ -24,6 +25,7 @@
       border: none;
       border-radius: 10px;
       cursor: pointer;
+      margin: 10px;
     }
     button:hover {
       background-color: #ffe0b2;
@@ -33,30 +35,65 @@
       font-size: 1.5em;
       color: #4e342e;
     }
+    #food-img {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .share-buttons {
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
   <h1>กินอะไรดี?</h1>
   <button onclick="suggestFood()">สุ่มเมนูเลย!</button>
   <p id="result">...</p>
+  <img id="food-img" src="" alt="" style="display: none;">
+
+  <div class="share-buttons" style="display: none;" id="share-buttons">
+    <button onclick="shareFacebook()">แชร์ Facebook</button>
+    <button onclick="shareLINE()">แชร์ LINE</button>
+  </div>
 
   <script>
     const foods = [
-      "ข้าวมันไก่",
-      "ส้มตำไก่ย่าง",
-      "ราเมงหมูชาชู",
-      "หมูกระทะ",
-      "ซูชิแซลมอน",
-      "บะหมี่เป็ดย่าง",
-      "ข้าวผัดกะเพรา",
-      "ชาบูบุฟเฟ่ต์",
-      "ไก่ทอดเกาหลี",
-      "ข้าวแกงกะหรี่"
+      { name: "ข้าวมันไก่", img: "https://upload.wikimedia.org/wikipedia/commons/6/6f/Khao_Man_Gai.jpg" },
+      { name: "ส้มตำไก่ย่าง", img: "https://upload.wikimedia.org/wikipedia/commons/e/e3/Som_Tum_Thai.JPG" },
+      { name: "ราเมงหมูชาชู", img: "https://upload.wikimedia.org/wikipedia/commons/f/f0/Tonkotsu_ramen_by_satoshi.jpg" },
+      { name: "หมูกระทะ", img: "https://upload.wikimedia.org/wikipedia/commons/e/e6/Mu_Kratha.jpg" },
+      { name: "ซูชิแซลมอน", img: "https://upload.wikimedia.org/wikipedia/commons/e/e0/Sake_Sushi.jpg" },
+      { name: "บะหมี่เป็ดย่าง", img: "https://upload.wikimedia.org/wikipedia/commons/8/89/Bamee_Ped.jpg" },
+      { name: "ข้าวผัดกะเพรา", img: "https://upload.wikimedia.org/wikipedia/commons/e/e0/Thai_basil_chicken_%28Pad_Kra_Pao%29.jpg" },
+      { name: "ชาบูบุฟเฟ่ต์", img: "https://upload.wikimedia.org/wikipedia/commons/e/e7/Shabu_shabu_001.jpg" },
+      { name: "ไก่ทอดเกาหลี", img: "https://upload.wikimedia.org/wikipedia/commons/6/61/Korean_Fried_Chicken_02.jpg" },
+      { name: "ข้าวแกงกะหรี่", img: "https://upload.wikimedia.org/wikipedia/commons/0/0b/Curry_rice_001.jpg" }
     ];
 
+    let currentFood = null;
+
     function suggestFood() {
-      const randomFood = foods[Math.floor(Math.random() * foods.length)];
-      document.getElementById("result").innerText = "วันนี้ขอแนะนำ: " + randomFood;
+      currentFood = foods[Math.floor(Math.random() * foods.length)];
+      document.getElementById("result").innerText = "วันนี้ขอแนะนำ: " + currentFood.name;
+      const img = document.getElementById("food-img");
+      img.src = currentFood.img;
+      img.alt = currentFood.name;
+      img.style.display = "block";
+      document.getElementById("share-buttons").style.display = "block";
+    }
+
+    function shareFacebook() {
+      const url = encodeURIComponent(window.location.href);
+      const quote = encodeURIComponent(`วันนี้กิน ${currentFood.name} ด้วยกันไหม?`);
+      window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${quote}`, '_blank');
+    }
+
+    function shareLINE() {
+      const text = encodeURIComponent(`วันนี้กิน ${currentFood.name} ด้วยกันไหม? ลองสุ่มเมนูได้ที่นี่เลย: ${window.location.href}`);
+      window.open(`https://line.me/R/msg/text/?${text}`, '_blank');
     }
   </script>
 </body>
