@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Animal Match Game</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+    }
+
+    .board {
+      display: grid;
+      grid-template-columns: repeat(4, 100px);
+      gap: 10px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .card {
+      width: 100px;
+      height: 100px;
+      background-color: #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .card.flipped {
+      background-color: white;
+    }
+  </style>
+</head>
+<body>
+  <h1>Animal Match Game</h1>
+  <div id="game-board" class="board"></div>
+
+  <script>
+    const emojis = ['🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼'];
+    let cards = [...emojis, ...emojis];
+    cards = cards.sort(() => 0.5 - Math.random());
+
+    const board = document.getElementById('game-board');
+    let flipped = [];
+    let matched = [];
+
+    cards.forEach((emoji, index) => {
+      const card = document.createElement('div');
+      card.classList.add('card');
+      card.dataset.index = index;
+      card.dataset.emoji = emoji;
+      card.innerText = '';
+      board.appendChild(card);
+
+      card.addEventListener('click', () => {
+        if (flipped.length < 2 && !card.classList.contains('flipped') && !matched.includes(index)) {
+          card.classList.add('flipped');
+          card.innerText = emoji;
+          flipped.push({ index, card });
+
+          if (flipped.length === 2) {
+            const [first, second] = flipped;
+            if (first.card.dataset.emoji === second.card.dataset.emoji) {
+              matched.push(first.index, second.index);
+              flipped = [];
+            } else {
+              setTimeout(() => {
+                first.card.classList.remove('flipped');
+                first.card.innerText = '';
+                second.card.classList.remove('flipped');
+                second.card.innerText = '';
+                flipped = [];
+              }, 1000);
+            }
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
