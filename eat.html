@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>กินอะไรดี?</title>
+  <style>
+    body {
+      font-family: 'Kanit', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #fffde7;
+    }
+    h1 {
+      color: #ff6f00;
+    }
+    button {
+      padding: 1em 2em;
+      font-size: 1.2em;
+      background-color: #ffcc80;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #ffe0b2;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 1.5em;
+      color: #4e342e;
+    }
+  </style>
+</head>
+<body>
+  <h1>กินอะไรดี?</h1>
+  <button onclick="suggestFood()">สุ่มเมนูเลย!</button>
+  <p id="result">...</p>
+
+  <script>
+    const foods = [
+      "ข้าวมันไก่",
+      "ส้มตำไก่ย่าง",
+      "ราเมงหมูชาชู",
+      "หมูกระทะ",
+      "ซูชิแซลมอน",
+      "บะหมี่เป็ดย่าง",
+      "ข้าวผัดกะเพรา",
+      "ชาบูบุฟเฟ่ต์",
+      "ไก่ทอดเกาหลี",
+      "ข้าวแกงกะหรี่"
+    ];
+
+    function suggestFood() {
+      const randomFood = foods[Math.floor(Math.random() * foods.length)];
+      document.getElementById("result").innerText = "วันนี้ขอแนะนำ: " + randomFood;
+    }
+  </script>
+</body>
+</html>
