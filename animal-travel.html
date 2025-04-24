@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
-<link rel="manifest" href="manifest.json">
 <html lang="th">
 <head>
   <meta charset="UTF-8">
   <title>ดูกกี้ผจญภัย</title>
+  <link rel="manifest" href="manifest.json">
   <style>
     body {
       font-family: 'Kanit', sans-serif;
@@ -31,9 +32,18 @@
     }
     button {
       margin-top: 30px;
-      padding: 10px 20px;
-      font-size: 18px;
-      display: none;
+      padding: 16px 32px;
+      font-size: 22px;
+      font-weight: bold;
+      background-color: #3b4cca;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #2a399b;
     }
     .dropzone {
       border: 2px dashed #999;
@@ -45,8 +55,8 @@
 </head>
 <body>
 
-  <audio id="clickSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_7b5a9bfbf6.mp3?filename=click-124467.mp3"></audio>
-  <audio id="yaySound" src="https://cdn.pixabay.com/download/audio/2021/09/01/audio_9c4f75c6f5.mp3?filename=success-1-6297.mp3"></audio>
+  <audio id="clickSound" src="click.mp3"></audio>
+  <audio id="yaySound" src="yay.mp3"></audio>
 
   <div id="scene1" class="scene active">
     <h1>คลิกไอเท็มเพื่อเก็บของ</h1>
@@ -88,9 +98,6 @@
     function packItem(elem) {
       elem.classList.add('selected');
       playSound('clickSound');
-      if (document.querySelectorAll('.scene1 .selected').length >= 3) {
-        document.getElementById('nextBtn1').style.display = 'inline-block';
-      }
     }
 
     function choosePath(elem) {
@@ -122,12 +129,12 @@
       playSound('yaySound');
       document.getElementById('nextBtn3').style.display = 'inline-block';
     }
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(() => console.log("Service Worker Registered"));
+    }
   </script>
-  <script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js')
-      .then(() => console.log("Service Worker Registered"));
-  }
-</script>
+
 </body>
 </html>
