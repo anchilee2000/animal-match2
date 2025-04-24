@@ -2,83 +2,123 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Animal Match Game</title>
+  <title>Anime Dino Game</title>
   <style>
-    body {
-      font-family: sans-serif;
-      text-align: center;
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #fff0f5;
+      overflow: hidden;
+      font-family: 'Comic Sans MS', cursive;
     }
-
-    .board {
-      display: grid;
-      grid-template-columns: repeat(4, 100px);
-      gap: 10px;
-      justify-content: center;
-      margin-top: 20px;
-    }
-
-    .card {
-      width: 100px;
-      height: 100px;
-      background-color: #ccc;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 40px;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    .card.flipped {
-      background-color: white;
+    canvas {
+      display: block;
+      margin: auto;
+      background: #fefefe;
+      border: 3px dashed #ffc0cb;
     }
   </style>
 </head>
 <body>
-  <h1>Animal Match Game</h1>
-  <div id="game-board" class="board"></div>
-
+  <canvas id="gameCanvas" width="800" height="300"></canvas>
   <script>
-    const emojis = ['🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼'];
-    let cards = [...emojis, ...emojis];
-    cards = cards.sort(() => 0.5 - Math.random());
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
 
-    const board = document.getElementById('game-board');
-    let flipped = [];
-    let matched = [];
+    const dino = {
+      x: 50,
+      y: 220,
+      width: 40,
+      height: 40,
+      yVelocity: 0,
+      jumpPower: -12,
+      gravity: 0.6,
+      isJumping: false
+    };
 
-    cards.forEach((emoji, index) => {
-      const card = document.createElement('div');
-      card.classList.add('card');
-      card.dataset.index = index;
-      card.dataset.emoji = emoji;
-      card.innerText = '';
-      board.appendChild(card);
+    const cactus = {
+      x: canvas.width,
+      y: 220,
+      width: 20,
+      height: 40,
+      speed: 6
+    };
 
-      card.addEventListener('click', () => {
-        if (flipped.length < 2 && !card.classList.contains('flipped') && !matched.includes(index)) {
-          card.classList.add('flipped');
-          card.innerText = emoji;
-          flipped.push({ index, card });
+    let score = 0;
+    let isGameOver = false;
 
-          if (flipped.length === 2) {
-            const [first, second] = flipped;
-            if (first.card.dataset.emoji === second.card.dataset.emoji) {
-              matched.push(first.index, second.index);
-              flipped = [];
-            } else {
-              setTimeout(() => {
-                first.card.classList.remove('flipped');
-                first.card.innerText = '';
-                second.card.classList.remove('flipped');
-                second.card.innerText = '';
-                flipped = [];
-              }, 1000);
-            }
-          }
-        }
-      });
+    function drawDino() {
+      ctx.fillStyle = "#ff69b4";
+      ctx.fillRect(dino.x, dino.y, dino.width, dino.height);
+
+      ctx.fillStyle = "#000";
+      ctx.beginPath();
+      ctx.arc(dino.x + 30, dino.y + 15, 3, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(dino.x + 20, dino.y + 15, 3, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    function drawCactus() {
+      ctx.fillStyle = "#90ee90";
+      ctx.fillRect(cactus.x, cactus.y, cactus.width, cactus.height);
+    }
+
+    function update() {
+      if (isGameOver) return;
+
+      dino.y += dino.yVelocity;
+      dino.yVelocity += dino.gravity;
+
+      if (dino.y > 220) {
+        dino.y = 220;
+        dino.isJumping = false;
+      }
+
+      cactus.x -= cactus.speed;
+      if (cactus.x < -cactus.width) {
+        cactus.x = canvas.width + Math.random() * 100;
+        score++;
+      }
+
+      if (
+        dino.x < cactus.x + cactus.width &&
+        dino.x + dino.width > cactus.x &&
+        dino.y < cactus.y + cactus.height &&
+        dino.y + dino.height > cactus.y
+      ) {
+        isGameOver = true;
+        alert("Game Over! Score: " + score);
+        location.reload();
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      drawDino();
+      drawCactus();
+
+      ctx.fillStyle = "#000";
+      ctx.font = "20px sans-serif";
+      ctx.fillText("Score: " + score, 650, 30);
+    }
+
+    function gameLoop() {
+      update();
+      draw();
+      requestAnimationFrame(gameLoop);
+    }
+
+    document.addEventListener("keydown", function(e) {
+      if (e.code === "Space" && !dino.isJumping) {
+        dino.yVelocity = dino.jumpPower;
+        dino.isJumping = true;
+      }
     });
+
+    gameLoop();
   </script>
 </body>
 </html>
