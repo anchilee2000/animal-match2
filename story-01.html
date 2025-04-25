@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>นิทาน: โป้งแป้ง กับรองเท้าวิเศษ</title>
+  <style>
+    body {
+      font-family: "Noto Sans Thai", sans-serif;
+      background: #fff9f0;
+      color: #333;
+      text-align: center;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+    h1 {
+      color: #c06c00;
+    }
+    .story-part {
+      display: none;
+    }
+    .story-part.active {
+      display: block;
+    }
+    img {
+      width: 100%;
+      max-height: 300px;
+      object-fit: cover;
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      background: #ffa200;
+      border: none;
+      color: white;
+      font-size: 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>โป้งแป้ง กับรองเท้าวิเศษ</h1>
+
+  <div id="story-container">
+    <div class="story-part active">
+      <img src="IMAGE1.png" alt="โป้งแป้งเดินในตลาด">
+      <p>กาลครั้งหนึ่งนานมาแล้ว... เด็กชายชื่อ “โป้งแป้ง” เจอคุณลุงที่ยื่นรองเท้าวิเศษให้เขา</p>
+    </div>
+
+    <div class="story-part">
+      <img src="IMAGE2.png" alt="เท้าไวย์แลนด์">
+      <p>เมื่อโป้งแป้งใส่รองเท้า โลกก็หมุนติ้ว ๆ และเขาก็มาอยู่ที่ “เท้าไวย์แลนด์” ดินแดนวิเศษแห่งการวิ่ง</p>
+    </div>
+
+    <div class="story-part">
+      <img src="IMAGE3.png" alt="เจ้าปุยฟ้า">
+      <p>โป้งแป้งพบเจ้าปุยฟ้าที่หลงทาง และตัดสินใจช่วยพากลับหมู่บ้านเมฆ</p>
+    </div>
+
+    <div class="story-part">
+      <img src="IMAGE4.png" alt="กลับมาบ้าน">
+      <p>เมื่อเสร็จภารกิจ โป้งแป้งก็กลับมาในห้องนอน พร้อมขนนกแห่งฝันดีอยู่ข้างหมอน</p>
+    </div>
+  </div>
+
+  <button onclick="nextPart()">หน้าถัดไป</button>
+
+  <script>
+    let currentPart = 0;
+    const parts = document.querySelectorAll(".story-part");
+
+    function nextPart() {
+      parts[currentPart].classList.remove("active");
+      currentPart++;
+      if (currentPart < parts.length) {
+        parts[currentPart].classList.add("active");
+      } else {
+        document.querySelector("button").disabled = true;
+        document.querySelector("button").innerText = "จบแล้วจ้า!";
+      }
+    }
+  </script>
+
+</body>
+</html>
